@@ -1,34 +1,99 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import {Paper, Tabs, Tab} from '@material-ui/core';
+import {AppBar, Tabs, Tab, Box, Typography, FormGroup, FormControlLabel, Switch, IconButton, MenuItem, Menu} from '@material-ui/core';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import HomeIcon from '@material-ui/icons/Home';
+import PersonIcon from '@material-ui/icons/Person';
+import PeopleIcon from '@material-ui/icons/People';
 
-const useStyles = makeStyles({
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
   },
-});
+}));
 
-export default function CenteredTabs() {
+export default function SimpleTabs() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
 
-  const handleChange = (event, newValue) => {
+  const [value, setValue] = React.useState(0);
+  const handleTab = (event, newValue) => {
     setValue(newValue);
   };
 
+  const [auth, setAuth] = React.useState(true);
+  const handleLog = (event) => {
+    setAuth(event.target.checked);
+  };
+
   return (
-    <Paper className={classes.root}>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        indicatorColor="primary"
-        textColor="primary"
-        centered
-      >
-        <Tab label="Item One" />
-        <Tab label="Item Two" />
-        <Tab label="Item Three" />
-      </Tabs>
-    </Paper>
+    <div className={classes.root}>
+      <FormGroup>
+        <FormControlLabel
+          control={<Switch checked={auth} onChange={handleLog} aria-label="login switch" />}
+          label={auth ? 'Logout' : 'Login'}
+        />
+      </FormGroup>
+      <AppBar position="static">
+        <Tabs value={value} onChange={handleTab} aria-label="simple tabs example" centered>
+          <Tab label="Home" icon={ <HomeIcon />} {...a11yProps(0)} />
+          {auth && (
+            <Tab label="Profile" icon={ <PersonIcon />} {...a11yProps(1)} />
+          )}
+          {auth && (
+            <Tab label="Team" icon={ <PeopleIcon />} {...a11yProps(2)} />
+          )}
+          {auth && (
+            <Tab label="Compte" icon={ <AccountCircle />} {...a11yProps(3)} />
+          )}
+        </Tabs>
+      </AppBar>
+      <TabPanel value={value} index={0}>
+        Home
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        Profile
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        Team
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        Compte
+      </TabPanel>
+    </div>
   );
 }
