@@ -1,13 +1,40 @@
-import React from 'react';
+import React,  { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import {AppBar, Tabs, Tab, Box, Typography, FormGroup, FormControlLabel, Switch, IconButton, MenuItem, Menu} from '@material-ui/core';
+import {AppBar, Tabs, Tab, Box, Typography, FormGroup, FormControlLabel, Switch} from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import PeopleIcon from '@material-ui/icons/People';
+import GridList, {Teams} from '../components/Grid';
+//import Team from '../models/Team';
+//import equi from '../services/TeamServices';
+//import { ajax } from 'rxjs/ajax';
+//import { map } from 'rxjs/operators';
+
+
+const api = 'http://localhost:8081/';
+
+/*const getName = user => `${user.name}`;
+
+const tes = ajax
+  .getJSON(api)
+  .pipe(map(({ results: users }) => users.map(getName)));
+
+const useObservable = observable => {
+  const [state, setState] = useState();
+  console.log(state);
+
+  useEffect(() => {
+    const sub = observable.subscribe(setState);
+    return () => sub.unsubscribe();
+  }, [observable]);
+
+  return state;
+};*/
 
 function TabPanel(props) {
+  
   const { children, value, index, ...other } = props;
 
   return (
@@ -48,7 +75,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SimpleTabs() {
+  const [error, setError] = useState(null);
+  const [teams, setTeams] = useState([]);
+
+  useEffect(() => {
+    fetch(api)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          console.log(result);
+          setTeams(result);
+        },
+        (error) => {
+          console.log(error);
+          setError(error);
+        }
+      )
+  }, []);
+  
   const classes = useStyles();
+
+  /*var teams = [];
+  for (let i = 0; i < Teams.length; i++) {
+    var team = new Team(Teams[i].id, Teams[i].name, Teams[i].coach, Teams[i].players);
+    teams[i] = team;
+  }*/
 
   const [value, setValue] = React.useState(0);
   const handleTab = (event, newValue) => {
@@ -83,7 +134,7 @@ export default function SimpleTabs() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        Home
+        <GridList items={teams}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         Profile
