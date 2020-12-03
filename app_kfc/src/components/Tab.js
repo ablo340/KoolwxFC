@@ -13,25 +13,7 @@ import GridList, {Teams} from '../components/Grid';
 //import { map } from 'rxjs/operators';
 
 
-const api = 'http://localhost:8081/';
-
-/*const getName = user => `${user.name}`;
-
-const tes = ajax
-  .getJSON(api)
-  .pipe(map(({ results: users }) => users.map(getName)));
-
-const useObservable = observable => {
-  const [state, setState] = useState();
-  console.log(state);
-
-  useEffect(() => {
-    const sub = observable.subscribe(setState);
-    return () => sub.unsubscribe();
-  }, [observable]);
-
-  return state;
-};*/
+const api = '';
 
 function TabPanel(props) {
   
@@ -79,7 +61,7 @@ export default function SimpleTabs() {
   const [teams, setTeams] = useState([]);
 
   useEffect(() => {
-    fetch(api)
+    fetch("http://localhost:8081/allTeams")
       .then(res => res.json())
       .then(
         (result) => {
@@ -94,12 +76,6 @@ export default function SimpleTabs() {
   }, []);
   
   const classes = useStyles();
-
-  /*var teams = [];
-  for (let i = 0; i < Teams.length; i++) {
-    var team = new Team(Teams[i].id, Teams[i].name, Teams[i].coach, Teams[i].players);
-    teams[i] = team;
-  }*/
 
   const [value, setValue] = React.useState(0);
   const handleTab = (event, newValue) => {

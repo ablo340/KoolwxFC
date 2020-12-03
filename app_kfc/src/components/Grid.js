@@ -1,4 +1,4 @@
-import React from 'react';
+import React,  { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 import CardItem from '../components/CardItem'
@@ -15,6 +15,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function GridList({items}) {
+  /*const [error, setError] = useState(null);
+  const [coachs, setCoach] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8081/allCoachTeams")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          console.log(result);
+          setCoach(result);
+        },
+        (error) => {
+          console.log(error);
+          setError(error);
+        }
+      )
+  }, []);*/
+
   const classes = useStyles();
 
   function FormRow() {
@@ -22,7 +40,7 @@ export default function GridList({items}) {
       <React.Fragment>
           {items.map((item) =>(
             <Grid item xs={4} key={item.id}>
-                <CardItem className={classes.paper} name={item.name} coach={item.coach} players={item.players}/>
+                <CardItem name={item.name} coach={item.Coach} players={item.players}/>
             </Grid>
           ))}
       </React.Fragment>
@@ -30,7 +48,7 @@ export default function GridList({items}) {
   }
 
   return (
-    <Grid container spacing={1}>
+    <Grid container className={classes.paper} spacing={1}>
         <Grid container item xs={12} spacing={3}>
             <FormRow />
         </Grid>

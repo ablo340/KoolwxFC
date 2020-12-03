@@ -1,8 +1,8 @@
 import { Person } from "./Person";
 
 export class Player extends Person {
-    constructor(name, firstname, age, position, team){
-        super(name, firstname, age);
+    constructor(id, name, firstname, age, position, team){
+        super(id, name, firstname, age);
         this.position = position;
         this.team = team
     }
