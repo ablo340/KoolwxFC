@@ -7,10 +7,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import PeopleIcon from '@material-ui/icons/People';
 import GridList, {Teams} from '../components/Grid';
-//import Team from '../models/Team';
-//import equi from '../services/TeamServices';
-//import { ajax } from 'rxjs/ajax';
-//import { map } from 'rxjs/operators';
+import Auth from '../components/Auth';
 
 
 const api = '';

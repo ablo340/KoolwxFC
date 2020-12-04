@@ -1,9 +1,13 @@
 import express from 'express';
-//var express = require('express'); // Web Framework
-var app = express();
-//import { Team } from './models/Team.mjs';
+import bodyParser from 'body-parser';
+import multer from 'multer';
 import Sequelize from 'sequelize';
 import DataTypes from 'sequelize';
+
+/**         CONFIGURATIONS APP              */
+
+var app = express();
+var upload = multer();
 
 app.use((req, res, next) => {
     res.append('Access-Control-Allow-Origin', ['*']);
@@ -12,6 +16,17 @@ app.use((req, res, next) => {
     res.set('Content-Type', 'application/json');
     next();
 });
+
+// for parsing application/json
+app.use(bodyParser.json()); 
+
+// for parsing application/xwww-
+app.use(bodyParser.urlencoded({ extended: true })); 
+//form-urlencoded
+
+// for parsing multipart/form-data
+app.use(upload.array()); 
+app.use(express.static('public'));
 
 //const sqlite3 = require('sqlite3').verbose();
 const sequelize = new Sequelize({
@@ -32,14 +47,22 @@ const Coach = sequelize.define('Coach', {
       type: DataTypes.STRING,
       allowNull: false // allowNull defaults to true
     },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: true // allowNull defaults to true
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: true // allowNull defaults to true
+    },
     age: {
       type: DataTypes.INTEGER,
       allowNull: false // allowNull defaults to true
     },
-    profession: {
-      type: DataTypes.STRING,
-      allowNull: false // allowNull defaults to true
-    },
+    access: {
+        type: DataTypes.STRING,
+        allowNull: false // allowNull defaults to true
+    }
   }, {
     // Other model options go here
     sequelize, // We need to pass the connection instance
@@ -79,6 +102,14 @@ const Team = sequelize.define('Team', {
       type: DataTypes.STRING,
       allowNull: false // allowNull defaults to true
     },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: true // allowNull defaults to true
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: true // allowNull defaults to true
+    },
     age: {
       type: DataTypes.INTEGER,
       allowNull: false // allowNull defaults to true
@@ -86,6 +117,10 @@ const Team = sequelize.define('Team', {
     position: {
       type: DataTypes.STRING,
       allowNull: false // allowNull defaults to true
+    },
+    access: {
+        type: DataTypes.STRING,
+        allowNull: false // allowNull defaults to true
     }
   }, {
     // Other model options go here
@@ -130,6 +165,38 @@ app.get('/allPlayers',  async function (req, res) {
     const players = await Player.findAll({include: {model: Team, include: Coach}});
     
     res.end(JSON.stringify(players)); // Result in JSON format
+    
+})
+
+app.post('/login', async function (req, res) {
+    var data;
+    switch(req.body.statut){
+        case "coach":
+            const coach = await Coach.findOne({
+                where: {
+                  username: req.body.username,
+                  password: req.body.password
+                }
+              });
+            if (coach != null) {
+                data = coach;
+            }
+            break;
+        case "player":
+            const player = await Player.findOne({
+                where: {
+                  username:  req.body.username,
+                  password: req.body.password
+                }
+              });
+            if (player != null) {
+                data = player;
+            }
+            break;
+        default:
+            console.log("Ce statut n'existe pas")
+    }
+    res.end(JSON.stringify(data)); // Result in JSON format
     
 })
 

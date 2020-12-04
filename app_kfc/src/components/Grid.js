@@ -40,7 +40,7 @@ export default function GridList({items}) {
       <React.Fragment>
           {items.map((item) =>(
             <Grid item xs={4} key={item.id}>
-                <CardItem name={item.name} coach={item.Coach} players={item.players}/>
+                <CardItem className={classes.paper} name={item.name} coach={item.Coach} players={item.players}/>
             </Grid>
           ))}
       </React.Fragment>
@@ -48,7 +48,7 @@ export default function GridList({items}) {
   }
 
   return (
-    <Grid container className={classes.paper} spacing={1}>
+    <Grid container spacing={1}>
         <Grid container item xs={12} spacing={3}>
             <FormRow />
         </Grid>

@@ -18,10 +18,12 @@ export default function CardItem({name, coach}) {
   return (
     <Card className={classes.root}>
         <CardContent>
-            
+            <Typography gutterBottom variant="h5" component="h2">
                 {name}
-            
+            </Typography>
+            <Typography variant="h5" color="textSecondary" component="h2">
                 Coach : {coach.name} {coach.firstname}
+            </Typography>
             
         </CardContent>
         <CardActions>
