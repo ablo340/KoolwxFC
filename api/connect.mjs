@@ -184,6 +184,7 @@ app.post('/login', async function (req, res) {
             break;
         case "player":
             const player = await Player.findOne({
+                include: {model: Team, include: [Coach, Player]},
                 where: {
                   username:  req.body.username,
                   password: req.body.password

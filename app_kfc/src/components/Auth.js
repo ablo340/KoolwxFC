@@ -1,11 +1,15 @@
-import React,  { useState, useEffect } from 'react';
-
+import React,  { useState, useEffect, useContext } from 'react';
+import LogContext from '../contexts/AuthContext';
+import PlayerContext from '../contexts/PlayerContext';
 
 export default function Auth(){
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [statut, setStatut] = useState("coach");
+    
+    const contextPlayerValue = useContext(PlayerContext);
+    const contextValue = useContext(LogContext);
 
     const handleChangeUsername = (event) => {
         const value = event.currentTarget.value;
@@ -20,8 +24,8 @@ export default function Auth(){
         setStatut(value);
     }
 
+
     async function fetchData() {
-        console.log(username + " "+ password + " " + statut)
         fetch("http://localhost:8081/login", {
             method: 'POST',
             headers: {
@@ -37,11 +41,12 @@ export default function Auth(){
           .then(
             (result) => {
               console.log(result);
-              //setTeams(result);
+              contextValue.updateLog(true);
+              contextPlayerValue.updatePlayer(result);
             },
             (error) => {
               console.log(error);
-              //setError(error);
+              contextValue.updateLog(false);
             }
           )
     }

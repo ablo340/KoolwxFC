@@ -8,6 +8,9 @@ import PersonIcon from '@material-ui/icons/Person';
 import PeopleIcon from '@material-ui/icons/People';
 import GridList, {Teams} from '../components/Grid';
 import Auth from '../components/Auth';
+import Compte from '../components/Compte';
+import LogContext from '../contexts/AuthContext';
+import PlayerContext from '../contexts/PlayerContext';
 
 
 const api = '';
@@ -56,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SimpleTabs() {
   const [error, setError] = useState(null);
   const [teams, setTeams] = useState([]);
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     fetch("http://localhost:8081/allTeams")
@@ -79,45 +83,66 @@ export default function SimpleTabs() {
     setValue(newValue);
   };
 
-  const [auth, setAuth] = React.useState(true);
+  const [auth, setAuth] = React.useState(false);
   const handleLog = (event) => {
     setAuth(event.target.checked);
   };
+  const handleLougout = () => {
+    setAuth(false);
+  };
 
+  const contextValue ={
+    log: auth,
+    updateLog: setAuth
+  }
+  const contextPlayerValue ={
+    player: user,
+    updatePlayer: setUser
+  }
   return (
-    <div className={classes.root}>
-      <FormGroup>
-        <FormControlLabel
-          control={<Switch checked={auth} onChange={handleLog} aria-label="login switch" />}
-          label={auth ? 'Logout' : 'Login'}
-        />
-      </FormGroup>
-      <AppBar position="static">
-        <Tabs value={value} onChange={handleTab} aria-label="simple tabs example" centered>
-          <Tab label="Home" icon={ <HomeIcon />} {...a11yProps(0)} />
-          {auth && (
-            <Tab label="Profile" icon={ <PersonIcon />} {...a11yProps(1)} />
-          )}
-          {auth && (
-            <Tab label="Team" icon={ <PeopleIcon />} {...a11yProps(2)} />
-          )}
-          {auth && (
-            <Tab label="Compte" icon={ <AccountCircle />} {...a11yProps(3)} />
-          )}
-        </Tabs>
-      </AppBar>
-      <TabPanel value={value} index={0}>
-        <GridList items={teams}/>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Profile
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Team
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        Compte
-      </TabPanel>
-    </div>
+    <LogContext.Provider value={contextValue}>
+      <PlayerContext.Provider value={contextPlayerValue}>
+        <div className={classes.root}>
+          <FormGroup>
+            <FormControlLabel
+              control={<Switch checked={auth} onChange={handleLog} aria-label="login switch" />}
+              label={auth ? 'Logout' : 'Login'}
+            />
+          </FormGroup>
+          <AppBar position="static">
+            <Tabs value={value} onChange={handleTab} aria-label="simple tabs example" centered>
+              <Tab label="Compte" icon={ <AccountCircle />} {...a11yProps(0)} />
+              <Tab label="Home" icon={ <HomeIcon />} {...a11yProps(1)} />
+              {auth && (
+                <Tab label="Profile" icon={ <PersonIcon />} {...a11yProps(2)} />
+              )}
+              {auth && (
+                <Tab label="Team" icon={ <PeopleIcon />} {...a11yProps(3)} />
+              )}
+            </Tabs>
+          </AppBar>
+          <TabPanel value={value} index={0}>
+            {auth && (
+              <div>
+                <Compte/>
+                <button onClick={handleLougout}>Deconnexion</button>
+              </div>
+            )}
+            {!auth && (
+              <Auth/>
+            )}
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <GridList items={teams}/>
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            Profile
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            Team
+          </TabPanel>
+        </div>
+      </PlayerContext.Provider>
+    </LogContext.Provider>
   );
 }
