@@ -12,17 +12,17 @@ const useStyles = makeStyles({
   },
 });
 
-export default function CardItem({name, coach}) {
+export default function CardItem({team_name, coach_name, coach_firstname}) {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
         <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
-                {name}
+                {team_name}
             </Typography>
             <Typography variant="h5" color="textSecondary" component="h2">
-                Coach : {coach.name} {coach.firstname}
+                Coach : {coach_name} {coach_firstname}
             </Typography>
             
         </CardContent>

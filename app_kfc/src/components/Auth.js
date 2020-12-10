@@ -1,6 +1,6 @@
 import React,  { useState, useEffect, useContext } from 'react';
 import LogContext from '../contexts/AuthContext';
-import PlayerContext from '../contexts/PlayerContext';
+import UserContext from '../contexts/UserContext';
 
 export default function Auth(){
 
@@ -8,7 +8,7 @@ export default function Auth(){
     const [password, setPassword] = useState("");
     const [statut, setStatut] = useState("coach");
     
-    const contextPlayerValue = useContext(PlayerContext);
+    const contextUserValue = useContext(UserContext);
     const contextValue = useContext(LogContext);
 
     const handleChangeUsername = (event) => {
@@ -42,7 +42,7 @@ export default function Auth(){
             (result) => {
               console.log(result);
               contextValue.updateLog(true);
-              contextPlayerValue.updatePlayer(result);
+              contextUserValue.updateUser(result);
             },
             (error) => {
               console.log(error);
@@ -64,7 +64,7 @@ export default function Auth(){
         <form onSubmit={handleSubmit}>
             <img src="logo_kfc192.jpg"/>
             <input value={username} onChange={handleChangeUsername} type="text" placeholder="username"/>
-            <input value={password} onChange={handleChangePassword} type="text" placeholder="password"/>
+            <input value={password} onChange={handleChangePassword} type="password" placeholder="password"/>
             <select value={statut} onChange={handleChangeStatut}>
                 <option value="coach">Coach</option>
                 <option value="player">Player</option>

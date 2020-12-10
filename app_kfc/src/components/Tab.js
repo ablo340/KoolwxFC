@@ -1,17 +1,18 @@
 import React,  { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import {AppBar, Tabs, Tab, Box, Typography, FormGroup, FormControlLabel, Switch} from '@material-ui/core';
+import {AppBar, Tabs, Tab, Box, Typography} from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import PeopleIcon from '@material-ui/icons/People';
-import GridList, {Teams} from '../components/Grid';
+import GridList from '../components/Grid';
 import Auth from '../components/Auth';
+import Profile from '../components/Profile';
+import TeamDisplay from '../components/Teams';
 import Compte from '../components/Compte';
 import LogContext from '../contexts/AuthContext';
-import PlayerContext from '../contexts/PlayerContext';
-
+import UserContext from '../contexts/UserContext';
 
 const api = '';
 
@@ -57,24 +58,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SimpleTabs() {
-  const [error, setError] = useState(null);
-  const [teams, setTeams] = useState([]);
   const [user, setUser] = useState({});
-
-  useEffect(() => {
-    fetch("http://localhost:8081/allTeams")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          console.log(result);
-          setTeams(result);
-        },
-        (error) => {
-          console.log(error);
-          setError(error);
-        }
-      )
-  }, []);
   
   const classes = useStyles();
 
@@ -95,24 +79,20 @@ export default function SimpleTabs() {
     log: auth,
     updateLog: setAuth
   }
-  const contextPlayerValue ={
-    player: user,
-    updatePlayer: setUser
+  const contextUserValue ={
+    user: user,
+    updateUser: setUser
   }
   return (
     <LogContext.Provider value={contextValue}>
-      <PlayerContext.Provider value={contextPlayerValue}>
+      <UserContext.Provider value={contextUserValue}>
         <div className={classes.root}>
-          <FormGroup>
-            <FormControlLabel
-              control={<Switch checked={auth} onChange={handleLog} aria-label="login switch" />}
-              label={auth ? 'Logout' : 'Login'}
-            />
-          </FormGroup>
           <AppBar position="static">
             <Tabs value={value} onChange={handleTab} aria-label="simple tabs example" centered>
               <Tab label="Compte" icon={ <AccountCircle />} {...a11yProps(0)} />
-              <Tab label="Home" icon={ <HomeIcon />} {...a11yProps(1)} />
+              {auth && (
+                <Tab label="Home" icon={ <HomeIcon />} {...a11yProps(1)} />
+              )}
               {auth && (
                 <Tab label="Profile" icon={ <PersonIcon />} {...a11yProps(2)} />
               )}
@@ -133,16 +113,16 @@ export default function SimpleTabs() {
             )}
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <GridList items={teams}/>
+            <h1>En construction</h1>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            Profile
+            <Profile/>
           </TabPanel>
           <TabPanel value={value} index={3}>
-            Team
+            <TeamDisplay/>
           </TabPanel>
         </div>
-      </PlayerContext.Provider>
+      </UserContext.Provider>
     </LogContext.Provider>
   );
 }

@@ -14,33 +14,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function GridList({items}) {
-  /*const [error, setError] = useState(null);
-  const [coachs, setCoach] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost:8081/allCoachTeams")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          console.log(result);
-          setCoach(result);
-        },
-        (error) => {
-          console.log(error);
-          setError(error);
-        }
-      )
-  }, []);*/
+export default function GridList({coach_name, coach_firstname, teams}) {
 
   const classes = useStyles();
-
   function FormRow() {
     return (
       <React.Fragment>
-          {items.map((item) =>(
-            <Grid item xs={4} key={item.id}>
-                <CardItem className={classes.paper} name={item.name} coach={item.Coach} players={item.players}/>
+          {teams.map((team) =>(
+            <Grid item xs={4} key={team.id}>
+                <CardItem className={classes.paper} team_name={team.name} coach_name={coach_name} coach_firstname={coach_firstname}/>
             </Grid>
           ))}
       </React.Fragment>

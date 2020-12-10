@@ -1,13 +1,9 @@
-import React,  {useContext } from 'react';
-import PlayerContext from '../contexts/PlayerContext';
+import React from 'react';
 
 export default function Auth(){
-    
-    const contextValue = useContext(PlayerContext);
     return(
         <div>
-            <h1>{contextValue.player.name}</h1>
-            <h1>{contextValue.player.firstname}</h1>
+            <h1>Vous êtes conneté</h1>
         </div>
     )
 }
