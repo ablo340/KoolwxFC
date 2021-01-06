@@ -12,7 +12,7 @@ chai.use(chaiHttp);
 
 /**         CONFIGURATIONS APP              */
 
-export var app = express();
+export let app = express();
 var upload = multer();
 
 app.use((req, res, next) => {
@@ -35,7 +35,7 @@ app.use(upload.array());
 app.use(express.static('public'));
 
 //const sqlite3 = require('sqlite3').verbose();
-const sequelize = new Sequelize({
+export const sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: './db/app.db'
 });
@@ -80,7 +80,7 @@ export const Coach = sequelize.define('Coach', {
   });
 
 /*******            TEAM        */
-const Team = sequelize.define('Team', {
+export const Team = sequelize.define('Team', {
     // Model attributes are defined here
     name: {
       type: DataTypes.STRING,
@@ -98,7 +98,7 @@ const Team = sequelize.define('Team', {
 
 
   /**           PLAYER               */
-  const Player = sequelize.define('Player',{
+  export const Player = sequelize.define('Player',{
     // Model attributes are defined here
     name: {
       type: DataTypes.STRING,
@@ -174,7 +174,7 @@ app.get('/allPlayers',  async function (req, res) {
 })
 
 app.post('/login', async function (req, res) {
-    var data;
+    var data = {"error": "Connexion echouee"};
     switch(req.body.statut){
         case "coach":
             const coach = await Coach.findOne({
@@ -201,7 +201,7 @@ app.post('/login', async function (req, res) {
             }
             break;
         default:
-            console.log("Ce statut n'existe pas")
+            data = {"error": "Ce statut n'existe pas"}
     }
     res.end(JSON.stringify(data)); // Result in JSON format
     
@@ -212,56 +212,9 @@ export default function nom() {
 }
 
 // Start server and listen on http://localhost:8081/
-export var server = app.listen(8081, function () {
+export let server = app.listen(8081, function () {
     var host = server.address().address
     var port = server.address().port
 
     console.log("app listening at http://%s:%s", host, port)
-});
-
-
-
-/*            TESTS           */
-
-/*
-  * Test the /GET route
-  */
-
-describe('/GET teams', () => {
-    it('should get all teams', function(done) {
-        request(app)
-        .get('/allTeams')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('array');
-          res.body.length.should.be.eql(4);
-          done();
-        });
-    });
-});
-
-describe('/GET coachs', () => {
-  it('should get all coachs', function(done) {
-      request(app)
-      .get('/allCoach')
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('array');
-        res.body.length.should.be.eql(9);
-        done();
-      });
-  });
-});
-
-describe('/GET players', () => {
-  it('should get all players', function(done) {
-      request(app)
-      .get('/allPlayers')
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('array');
-        res.body.length.should.be.eql(25);
-        done();
-      });
-  });
 });
