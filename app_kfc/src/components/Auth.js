@@ -2,7 +2,9 @@ import React,  { useState, useEffect, useContext } from 'react';
 import LogContext from '../contexts/AuthContext';
 import UserContext from '../contexts/UserContext';
 
+
 export default function Auth(){
+    const api = 'http://localhost:8081/login';
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -26,7 +28,7 @@ export default function Auth(){
 
 
     async function fetchData() {
-        fetch("http://localhost:8081/login", {
+        fetch(api, {
             method: 'POST',
             headers: {
                 "Content-type": "application/json"

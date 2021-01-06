@@ -1,4 +1,4 @@
-import React,  { useState, useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 import CardItem from '../components/CardItem'
@@ -22,7 +22,7 @@ export default function GridList({coach_name, coach_firstname, teams}) {
       <React.Fragment>
           {teams.map((team) =>(
             <Grid item xs={4} key={team.id}>
-                <CardItem className={classes.paper} team_name={team.name} coach_name={coach_name} coach_firstname={coach_firstname}/>
+                <CardItem className={classes.paper} team={team} coach_name={coach_name} coach_firstname={coach_firstname}/>
             </Grid>
           ))}
       </React.Fragment>

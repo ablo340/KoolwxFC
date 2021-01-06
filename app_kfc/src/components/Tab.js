@@ -1,4 +1,4 @@
-import React,  { useState, useEffect } from 'react';
+import React,  { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {AppBar, Tabs, Tab, Box, Typography} from '@material-ui/core';
@@ -6,15 +6,12 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import PeopleIcon from '@material-ui/icons/People';
-import GridList from '../components/Grid';
 import Auth from '../components/Auth';
 import Profile from '../components/Profile';
 import TeamDisplay from '../components/Teams';
 import Compte from '../components/Compte';
 import LogContext from '../contexts/AuthContext';
 import UserContext from '../contexts/UserContext';
-
-const api = '';
 
 function TabPanel(props) {
   
@@ -68,9 +65,7 @@ export default function SimpleTabs() {
   };
 
   const [auth, setAuth] = React.useState(false);
-  const handleLog = (event) => {
-    setAuth(event.target.checked);
-  };
+  
   const handleLougout = () => {
     setAuth(false);
   };
@@ -116,7 +111,7 @@ export default function SimpleTabs() {
             <h1>En construction</h1>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <Profile/>
+            <Profile playerValue={{}}/>
           </TabPanel>
           <TabPanel value={value} index={3}>
             <TeamDisplay/>

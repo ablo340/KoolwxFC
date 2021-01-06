@@ -3,10 +3,16 @@ import bodyParser from 'body-parser';
 import multer from 'multer';
 import Sequelize from 'sequelize';
 import DataTypes from 'sequelize';
+import request from 'supertest';
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+let should = chai.should();
+
+chai.use(chaiHttp);
 
 /**         CONFIGURATIONS APP              */
 
-var app = express();
+export var app = express();
 var upload = multer();
 
 app.use((req, res, next) => {
@@ -37,7 +43,7 @@ const sequelize = new Sequelize({
 
 /**           COACH               */
 
-const Coach = sequelize.define('Coach', {
+export const Coach = sequelize.define('Coach', {
     // Model attributes are defined here
     name: {
       type: DataTypes.STRING,
@@ -73,7 +79,7 @@ const Coach = sequelize.define('Coach', {
     timestamps: false
   });
 
-/******* TEAM        */
+/*******            TEAM        */
 const Team = sequelize.define('Team', {
     // Model attributes are defined here
     name: {
@@ -142,15 +148,14 @@ Team.Coach = Team.belongsTo(Coach);
 Coach.Team = Coach.hasMany(Team);
 
 
+/**             REQUETES             */
+
 app.get('/allTeams', async function (req, res) {
 
     // Find all Teams
     const teams = await Team.findAll({include: [{model: Coach}, {model: Player}]});
     
     res.end(JSON.stringify(teams)); // Result in JSON format
-
-    
-    
 })
 
 app.get('/allCoach', async function (req, res) {
@@ -202,11 +207,61 @@ app.post('/login', async function (req, res) {
     
 })
 
+export default function nom() {
+  return 0;
+}
 
 // Start server and listen on http://localhost:8081/
-var server = app.listen(8081, function () {
+export var server = app.listen(8081, function () {
     var host = server.address().address
     var port = server.address().port
 
     console.log("app listening at http://%s:%s", host, port)
+});
+
+
+
+/*            TESTS           */
+
+/*
+  * Test the /GET route
+  */
+
+describe('/GET teams', () => {
+    it('should get all teams', function(done) {
+        request(app)
+        .get('/allTeams')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('array');
+          res.body.length.should.be.eql(4);
+          done();
+        });
+    });
+});
+
+describe('/GET coachs', () => {
+  it('should get all coachs', function(done) {
+      request(app)
+      .get('/allCoach')
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('array');
+        res.body.length.should.be.eql(9);
+        done();
+      });
+  });
+});
+
+describe('/GET players', () => {
+  it('should get all players', function(done) {
+      request(app)
+      .get('/allPlayers')
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('array');
+        res.body.length.should.be.eql(25);
+        done();
+      });
+  });
 });

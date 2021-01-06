@@ -7,11 +7,9 @@ export default function TeamDisplay(){
     const contextUserValue = useContext(UserContext);
     var player = false;
 
-    if(contextUserValue.user.access == "player"){
+    if(contextUserValue.user.access === "player"){
         player=true;
     }
-
-    console.log(contextUserValue.user.name)
 
     return(
         <div>
