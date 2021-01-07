@@ -12,7 +12,7 @@ chai.use(chaiHttp);
 
 /**         CONFIGURATIONS APP              */
 
-export let app = express();
+let app = express();
 var upload = multer();
 
 app.use((req, res, next) => {
@@ -212,9 +212,11 @@ export default function nom() {
 }
 
 // Start server and listen on http://localhost:8081/
-export let server = app.listen(8081, function () {
+let server = app.listen(8081, function () {
     var host = server.address().address
     var port = server.address().port
 
     console.log("app listening at http://%s:%s", host, port)
 });
+
+export {app};

@@ -43,8 +43,10 @@ export default function Auth(){
           .then(
             (result) => {
               console.log(result);
-              contextValue.updateLog(true);
-              contextUserValue.updateUser(result);
+              if(!result.error){
+                contextValue.updateLog(true);
+                contextUserValue.updateUser(result);
+              }
             },
             (error) => {
               console.log(error);

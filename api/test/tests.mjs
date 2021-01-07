@@ -6,7 +6,6 @@ import sequelize from '../connect.mjs';
 import DataTypes from 'sequelize';
 let should = chai.should();
 
-
 chai.use(chaiHttp);
 
 //*            TESTS           */
