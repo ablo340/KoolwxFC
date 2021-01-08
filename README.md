@@ -41,4 +41,14 @@ Pour la partie server, les tests se trouvent dans le sous-dossier ***tests*** du
 
 #### Lancer les tests
 > cd api
-> npm test 
+> npm test
+
+## Lancer l'application
+
+### Lancer le server front-end
+> cd app_kfc
+> npm start
+
+### Lancer le server api
+> cd api
+> node connect.mjs
